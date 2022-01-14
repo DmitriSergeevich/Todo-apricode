@@ -1,38 +1,43 @@
-import { observer } from 'mobx-react-lite';
-import BtnsGroup from '../BtnsGroup/BtnsGroup';
-import InputTextItem from '../InputTextItem/InputTextItem';
-import TodoList from '../TodoList/TodoList';
-import store from '../../store/store';
-import { TodoFilterType } from '../../types';
+import { observer } from "mobx-react-lite";
+import BtnsGroup from "../BtnsGroup/BtnsGroup";
+import InputTextItem from "../InputTextItem/InputTextItem";
+import TodoList from "../TodoList/TodoList";
+import store from "../../store/store";
+import { TodoFilters } from "../../types";
+import ErrorBoundry from "../ErrorBoundry/ErrorBoundry";
 
 const App = observer(() => {
+  const { setFilterTodos, todoFilter, addTodo } = store;
+  const { all, complited, uncomplited } = TodoFilters;
 
   const filterBtns = [
     {
-      lable: 'Все',
-      handler: () => store.setFilterTodos(TodoFilterType.all),
-      classes: `btn ${store.todoFilter === TodoFilterType.all ? 'btn__blue' : ''}`,  
+      lable: "Все",
+      handler: () => setFilterTodos(all),
+      classes: `btn ${todoFilter === all ? "btn__blue" : ""}`,
     },
     {
-      lable: 'Выполненные',
-      handler: () => store.setFilterTodos(TodoFilterType.complited),
-      classes: `btn ${store.todoFilter === TodoFilterType.complited ? 'btn__blue' : ''}`,      
+      lable: "Выполненные",
+      handler: () => setFilterTodos(complited),
+      classes: `btn ${todoFilter === complited ? "btn__blue" : ""}`,
     },
     {
-      lable: 'Невыполненные',
-      handler: () => store.setFilterTodos(TodoFilterType.uncomplited),
-      classes: `btn ${store.todoFilter === TodoFilterType.uncomplited ? 'btn__blue' : ''}`,      
+      lable: "Невыполненные",
+      handler: () => setFilterTodos(uncomplited),
+      classes: `btn ${todoFilter === uncomplited ? "btn__blue" : ""}`,
     },
-  ]
+  ];
 
   return (
-    <div className='container'>
-      <h1 className=''>Todo list</h1>
-      <InputTextItem handler={store.addTodo}/>
-      <BtnsGroup btns={filterBtns}/>
-      <TodoList/>
-    </div>
+    <ErrorBoundry>
+      <div className="container">
+        <h1>Todo list</h1>
+        <InputTextItem handler={addTodo} />
+        <BtnsGroup btns={filterBtns} />
+        <TodoList />
+      </div>
+    </ErrorBoundry>
   );
-})
+});
 
 export default App;

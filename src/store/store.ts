@@ -1,52 +1,55 @@
 import { makeAutoObservable } from "mobx";
-import { TodoFilterType, TodoType } from "../types";
+import { TodoFilters, TodoType } from "../types";
+
+const { all, complited, uncomplited } = TodoFilters;
 
 class Store {
-
   todos: TodoType[] = [
-    {id: 1, title: 'do something', complited: false},
-    {id: 2, title: 'do someshit', complited: false},
-    {id: 3, title: 'do somebody', complited: false}
-  ]
+    { id: 1, title: "do something", complited: false },
+    { id: 2, title: "do someshit", complited: false },
+    { id: 3, title: "do somebody", complited: false },
+  ];
 
-  todoFilter: TodoFilterType = TodoFilterType.all;
+  todoFilter: TodoFilters = all;
 
-  constructor () {
-    makeAutoObservable(this)
+  constructor() {
+    makeAutoObservable(this);
   }
 
   addTodo = (textItem: string) => {
-    if(!textItem) return;
+    if (!textItem) return;
     const todo: TodoType = {
       id: Date.now(),
       title: textItem,
-      complited: false
-    }
-    this.todos.push(todo)
+      complited: false,
+    };
+    this.todos.push(todo);
+  };
+
+  removeTodo(id: number) {
+    this.todos = this.todos.filter((todo) => todo.id !== id);
   }
 
-  removeTodo (id: number) {  
-    this.todos = this.todos.filter(todo => todo.id !== id)
+  compliteTodo(id: number) {
+    this.todos = this.todos.map((todo) =>
+      todo.id === id ? { ...todo, complited: !todo.complited } : todo
+    );
   }
 
-  compliteTodo (id: number) {
-    this.todos = this.todos.map(todo => todo.id === id ? {...todo, complited: !todo.complited} : todo)
-  }
-
-  setFilterTodos (filter: TodoFilterType) {  
+  setFilterTodos = (filter: TodoFilters) => {
     this.todoFilter = filter;
-  }
+  };
 
-  filteredTodos (): TodoType[] {
+  filteredTodos(): TodoType[] {
     switch (this.todoFilter) {
-      case TodoFilterType.all:
+      case all:
         return this.todos;
 
-      case TodoFilterType.complited:
-        return this.todos.filter(todo => todo.complited)
+      case complited:
+        return this.todos.filter((todo) => todo.complited);
 
-      case TodoFilterType.uncomplited:
-        return this.todos.filter(todo => !todo.complited)
+      case uncomplited:
+        return this.todos.filter((todo) => !todo.complited);
 
       default:
         return this.todos;
