@@ -1,0 +1,9 @@
+$btn-base-color: #ced4da;
+$btn-blue-color: #39a1e6;
+$btn__red-border: #dc3545;
+$btn__green-border: #28a745;
+
+@function darker($color, $tone) {
+  $adjust: -16 * $tone;
+  @return adjust-color($color, $red: $adjust, $green: $adjust, $blue: $adjust);
+}
