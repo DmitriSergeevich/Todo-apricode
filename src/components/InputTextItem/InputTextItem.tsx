@@ -16,6 +16,7 @@ const InputTextItem = ({ handler }: InputTextItemProps) => {
       <input type='text'
         className='text-input'
         value={textItem}
+        
         placeholder='Что сделать?'
         onChange={(e) => setTextItem(e.target.value)}>
       </input>
